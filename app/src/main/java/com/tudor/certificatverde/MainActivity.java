@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        checkStoragePermission();
         openPdf();
     }
 
@@ -35,13 +34,15 @@ public class MainActivity extends AppCompatActivity {
 
         openPdf();
     }
-
+/*
     private void checkStoragePermission()
     {
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.MANAGE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.MANAGE_EXTERNAL_STORAGE }, REQUEST_CODE);
         }
     }
+
+ */
 
     private void openPdf(){
         String url = Environment.getExternalStorageDirectory().getAbsolutePath()+"/CertificatVerde/Certificat Verde.pdf";
