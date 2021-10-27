@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 
 import java.io.File;
 
@@ -20,29 +21,39 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String FILE_PROVIDER_NAME = "fileprovider";
     private static final int REQUEST_CODE = 753;
+    private boolean isReadable = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        openPdf();
+        if (!canRead()){
+            isReadable = false;
+            requestRead();
+        }
     }
 
     @Override
     public void onResume(){
         super.onResume();
 
-        openPdf();
-    }
-/*
-    private void checkStoragePermission()
-    {
-        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.MANAGE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.MANAGE_EXTERNAL_STORAGE }, REQUEST_CODE);
-        }
+        if (isReadable) openPdf();
     }
 
- */
+    private boolean canRead() {
+        // Impractical must first ask for useless Storage permission...
+        File exSD = Environment.getExternalStorageDirectory();
+        return exSD.canRead(); // this test works only if Storage permission was granted.
+    }
+
+    private void requestRead(){
+         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+         Uri uri = Uri.fromParts("package", getPackageName(), null);
+         intent.setData(uri);
+         startActivity(intent);
+    }
+
+
 
     private void openPdf(){
         String url = Environment.getExternalStorageDirectory().getAbsolutePath()+"/CertificatVerde/Certificat Verde.pdf";
